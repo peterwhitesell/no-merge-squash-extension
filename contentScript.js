@@ -24,16 +24,6 @@ async function newPRLoaded() {
     }
 }
 
-function hideButtons(mergeType) {
-    // This one is the actual merge button
-    const mergeButtonDefault = document.getElementsByClassName(`btn-group-${mergeType}`)
-    hideAll(mergeButtonDefault)
-
-    // This one is the one from the dropdown
-    const mergeButtonDropdown = document.getElementsByClassName(`js-merge-box-button-${mergeType}`)
-    hideAll(mergeButtonDropdown)
-}
-
 function selectButton(mergeType) {
     mergeMessage = document.querySelector('.merge-message')
     if (!mergeMessage) {
@@ -49,10 +39,17 @@ function selectButton(mergeType) {
     const otherItems = document.querySelectorAll(`.select-menu-item:not(.js-merge-box-button-${mergeType})`)
     hideAll(otherItems)
 
+    // hide dropdown caret
+    const caretButton = document.querySelectorAll('.js-merge-method-menu-button')
+    hideAll(caretButton)
 
     // select the menu item
     const selectedItem = document.getElementsByClassName(`js-merge-box-button-${mergeType}`)
     selectAll(selectedItem)
+
+    // select round the merge button
+    const mergebutton = document.querySelectorAll('.merge-box-button')
+    addClassAll(mergebutton, 'rounded-right-2')
 }
 
 function hideAll(elements) {
@@ -64,5 +61,11 @@ function hideAll(elements) {
 function selectAll(elements) {
     for (let element of elements) {
         element.click()
+    }
+}
+
+function addClassAll(elements, cls) {
+    for (let element of elements) {
+        element.className = `${element.className} ${cls}`
     }
 }
