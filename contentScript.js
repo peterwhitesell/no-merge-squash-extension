@@ -14,26 +14,55 @@ async function newPRLoaded() {
         const targetBranch = basePRMessage[2].children[0].children[0].innerText
 
         chrome.storage.sync.get(["branchNameRegex"]).then(({branchNameRegex = "main"}) => {
+            console.log('restricting merge type for PR to' + `%c ${targetBranch}`, 'color:red')
             if (targetBranch.match(branchNameRegex)) {
-                // Execute after 1 second, because the PR buttons are loaded dynamically
-                setTimeout(hideButtons, 1000);
+                selectButton('merge')
+            } else {
+                selectButton('squash')
             }
         });
     }
 }
 
-function hideButtons() {
+function hideButtons(mergeType) {
     // This one is the actual merge button
-    const mergeButtonDefault = document.getElementsByClassName("btn-group-squash")
+    const mergeButtonDefault = document.getElementsByClassName(`btn-group-${mergeType}`)
     hideAll(mergeButtonDefault)
 
     // This one is the one from the dropdown
-    const mergeButtonDropdown = document.getElementsByClassName("js-merge-box-button-squash")
+    const mergeButtonDropdown = document.getElementsByClassName(`js-merge-box-button-${mergeType}`)
     hideAll(mergeButtonDropdown)
+}
+
+function selectButton(mergeType) {
+    mergeMessage = document.querySelector('.merge-message')
+    if (!mergeMessage) {
+        console.log('merge message not found. waiting to try again ...')
+        return setTimeout(() => selectButton(mergeType), 100)
+    }
+    console.log('selecting merge type' + `%c ${mergeType}`, 'color:blue')
+    // hide the other merge buttons
+    const otherButtons = document.querySelectorAll(`.merge-box-button:not(.btn-group-${mergeType})`)
+    hideAll(otherButtons)
+
+    // hide the other menu items
+    const otherItems = document.querySelectorAll(`.select-menu-item:not(.js-merge-box-button-${mergeType})`)
+    hideAll(otherItems)
+
+
+    // select the menu item
+    const selectedItem = document.getElementsByClassName(`js-merge-box-button-${mergeType}`)
+    selectAll(selectedItem)
 }
 
 function hideAll(elements) {
     for (let element of elements) {
         element.style.display = "none"
+    }
+}
+
+function selectAll(elements) {
+    for (let element of elements) {
+        element.click()
     }
 }
