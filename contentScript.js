@@ -50,6 +50,7 @@ function selectButton(mergeType) {
     // select round the merge button
     const mergebutton = document.querySelectorAll('.merge-box-button')
     addClassAll(mergebutton, 'rounded-right-2')
+    return setTimeout(() => selectButton(mergeType), 1000)
 }
 
 function hideAll(elements) {
