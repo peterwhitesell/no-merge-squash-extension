@@ -32,40 +32,39 @@ function selectButton(mergeType) {
     }
     console.log('selecting merge type' + `%c ${mergeType}`, 'color:blue')
     // hide the other merge buttons
-    const otherButtons = document.querySelectorAll(`.merge-box-button:not(.btn-group-${mergeType})`)
-    hideAll(otherButtons)
+    hideAll(`.merge-box-button:not(.btn-group-${mergeType})`)
 
     // hide the other menu items
-    const otherItems = document.querySelectorAll(`.select-menu-item:not(.js-merge-box-button-${mergeType})`)
-    hideAll(otherItems)
+    hideAll(`.select-menu-item:not(.js-merge-box-button-${mergeType})`)
 
     // hide dropdown caret
-    const caretButton = document.querySelectorAll('.js-merge-method-menu-button')
-    hideAll(caretButton)
+    // hideAll('.js-merge-method-menu-button')
+    hideAll('.select-menu-button')
 
     // select the menu item
-    const selectedItem = document.getElementsByClassName(`js-merge-box-button-${mergeType}`)
-    selectAll(selectedItem)
+    selectAll(`.js-merge-box-button-${mergeType}`)
 
     // select round the merge button
-    const mergebutton = document.querySelectorAll('.merge-box-button')
-    addClassAll(mergebutton, 'rounded-right-2')
+    addClassAll('.merge-box-button', 'rounded-right-2')
     return setTimeout(() => selectButton(mergeType), 1000)
 }
 
-function hideAll(elements) {
+function hideAll(query) {
+    const elements = document.querySelectorAll(query)
     for (let element of elements) {
         element.style.display = "none"
     }
 }
 
-function selectAll(elements) {
+function selectAll(query) {
+    elements = document.querySelectorAll(query)
     for (let element of elements) {
         element.click()
     }
 }
 
-function addClassAll(elements, cls) {
+function addClassAll(query, cls) {
+    const elements = document.querySelectorAll(query)
     for (let element of elements) {
         element.className = `${element.className} ${cls}`
     }
